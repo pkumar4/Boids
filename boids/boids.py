@@ -5,6 +5,24 @@ import numpy as np
 
 class Boids(object):
     def __init__(self, config, count=0, fly_to_middle=0, alert_distance=0, formation_flying_distance=0, formation_flying_strength=0): 
+		#get config 
+		self.config=config
+
+		# setup flock
+		self.boid_count=count
+		self.position_limits = self.config['Boids']['position_limits']
+		self.velocity_limits = self.config['Boids']['velocity_limits']
+		self.fly_to_middle = fly_to_middle
+		self.alert_distance = alert_distance
+		self.formation_flying_distance = formation_flying_distance
+		self.formation_flying_strength = formation_flying_strength
+		
+		self.positions  = self.new_flock(self.boid_count,
+							np.array(self.position_limits[0:2]),
+							np.array(self.position_limits[2:4]))
+		self.velocities = self.new_flock(self.boid_count,
+							np.array(self.velocity_limits[0:2]),
+							np.array(self.velocity_limits[2:4]))
 		
 	# generate random velocities and positions
     def new_flock(self, count, lower_limits, upper_limits):
