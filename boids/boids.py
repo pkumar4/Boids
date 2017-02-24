@@ -62,15 +62,26 @@ class Boids(object):
         
        
 	
+	# invoke fly_towards_middle and avoid_nearby_boids
 	# and update positions and velocities
     def update_boids(self):
-        
+        self.fly_towards_middle(self.fly_to_middle)  
+        self.avoid_nearby_boids(self.alert_distance) 
+        self.velocities += self.match_speeds(self.formation_flying_distance, self.formation_flying_strength)
+        self.positions += self.velocities
 		
 	# animation runs update_boids() for each frame
     def animate(self,frame, scatter):
-        
+        self.update_boids()
+        scatter.set_offsets(zip(self.positions[0], self.positions[1]))
 
 	# run animation
     def simulate(self):
+        figure=plt.figure()
+        axes=plt.axes(xlim=self.config['Animation']['xlim'], ylim=self.config['Animation']['ylim'])
+        scatter=axes.scatter(self.positions[0],self.positions[1])
+        anim = animation.FuncAnimation(figure, self.animate, fargs=[scatter], 
+                                       frames=self.config['Animation']['frames'], interval=self.config['Animation']['interval'])
+        plt.show()
         
 
